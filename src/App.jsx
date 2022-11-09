@@ -12,7 +12,6 @@ import { useState, useEffect } from "react";
 
 function App() {
   const contactsCollectionRef = collection(db, "contacts");
-
   const initialContact = {
     name: "",
     lastname: "",
@@ -20,11 +19,13 @@ function App() {
     email: "",
   };
 
-
+  const [contact, setContact] = useState(initialContact);
+  const [contactList, setContactList] = useState([]);
+  const [currentContact, setCurrentContact] = useState(initialContact);
+  
   // -------------------------------------------------------------------------------
   // CREAR Y AGREGAR UN CONTACTO NUEVO
-
-  const [contact, setContact] = useState(initialContact);
+  
   
   // Controlador de  cambios en los Inputs del formulario que crea contactos:
   const handleInputChangesNew = (e) => {
@@ -35,15 +36,17 @@ function App() {
   // Función que agrega un nuevo contacto en la colección de contactos:
   const addContact = async () => {
     const contactDoc = contact;
-    await addDoc(contactsCollectionRef, contactDoc);
-    setContact(initialContact);
+
+    if ((contactDoc.name !== "") && (contactDoc.phone !== "" || contactDoc.email !== "")) {
+      await addDoc(contactsCollectionRef, contactDoc);
+      setContact(initialContact);
+    }
     getContacts();
   };
-
-
+  
+  
   // -------------------------------------------------------------------------------
   // MODIFICAR UN CONTACTO
-  const [currentContact, setCurrentContact] = useState(initialContact);
 
   // Controlador de  cambios en los Inputs del formulario que modifica contactos:
   const handleInputChangesCurrent = (e) => {
@@ -73,7 +76,6 @@ function App() {
   // -------------------------------------------------------------------------------
   // LISTAR LOS CONTACTOS AGREGADOS
 
-  const [contactList, setContactList] = useState([]);
 
   // Función que obtiene los contactos de la colección de contactos:
   const getContacts = async () => {
@@ -129,6 +131,7 @@ function App() {
                 value={contact.name}
                 onChange={handleInputChangesNew}
                 autoComplete="off"
+                required
               />
               <input
                 className="col-md-6 col-lg-3"
