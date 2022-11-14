@@ -30,8 +30,17 @@ function App() {
   const [user, setUser] = useState(null);
 
   onAuthStateChanged(auth, async (user) => {
+    const logoutButton = document.querySelector(".btn-logout");
+
     if (user) {
+      console.log(user)
       setUser(user);
+      logoutButton.style.display = "initial"
+      console.log("SI hay usuario")
+    } else {
+      setUser(null);
+      logoutButton.style.display = "none"
+      console.log("NO hay usuario")
     }
   });
 
@@ -119,7 +128,7 @@ function App() {
               </h1>
             </div>
             <button
-              className="btn btn-outline-danger logOut"
+              className="btn btn-outline-danger btn-logout"
               type="submit"
               onClick={() => {
                 logOut();
@@ -130,184 +139,156 @@ function App() {
           </div>
         </nav>
       </header>
+      {user ? (
+        <>
         <main className="container">
-          {/* FORMULARIO DE NUEVO CONTACTO */}
-          <div className="contactForm container">
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-              }}
-            >
-              <legend>
-                <h2>New Contact</h2>
-              </legend>
+        {/* FORMULARIO DE NUEVO CONTACTO */}
+        <div className="contactForm container">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+            }}
+          >
+            <legend>
+              <h2>New Contact</h2>
+            </legend>
 
-              <div className="new-contact-container row">
-                <input
-                  className="col-md-5 col-lg-2"
-                  type="text"
-                  placeholder="Name"
-                  name="name"
-                  value={contact.name}
-                  onChange={handleInputChangesNew}
-                  autoComplete="off"
-                  required
-                />
-                <input
-                  className="col-md-6 col-lg-3"
-                  type="text"
-                  placeholder="Lastname"
-                  name="lastname"
-                  value={contact.lastname}
-                  onChange={handleInputChangesNew}
-                  autoComplete="off"
-                />
-                <input
-                  className="col-md-5 col-lg-2"
-                  type="tel"
-                  placeholder="Phone"
-                  name="phone"
-                  value={contact.phone}
-                  onChange={handleInputChangesNew}
-                  autoComplete="off"
-                />
-                <input
-                  className="col-md-6 col-lg-3"
-                  type="text"
-                  placeholder="Email"
-                  name="email"
-                  value={contact.email}
-                  onChange={handleInputChangesNew}
-                  autoComplete="off"
-                />
+            <div className="new-contact-container row">
+              <input
+                className="col-md-5 col-lg-2"
+                type="text"
+                placeholder="Name"
+                name="name"
+                value={contact.name}
+                onChange={handleInputChangesNew}
+                autoComplete="off"
+                required
+              />
+              <input
+                className="col-md-6 col-lg-3"
+                type="text"
+                placeholder="Lastname"
+                name="lastname"
+                value={contact.lastname}
+                onChange={handleInputChangesNew}
+                autoComplete="off"
+              />
+              <input
+                className="col-md-5 col-lg-2"
+                type="tel"
+                placeholder="Phone"
+                name="phone"
+                value={contact.phone}
+                onChange={handleInputChangesNew}
+                autoComplete="off"
+              />
+              <input
+                className="col-md-6 col-lg-3"
+                type="text"
+                placeholder="Email"
+                name="email"
+                value={contact.email}
+                onChange={handleInputChangesNew}
+                autoComplete="off"
+              />
 
-                <button
-                  className="col-3 col-lg-1 btn btn-success"
-                  type="submit"
-                  onClick={addContact}
+              <button
+                className="col-3 col-lg-1 btn btn-success"
+                type="submit"
+                onClick={addContact}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  className="bi bi-plus-circle-fill"
+                  viewBox="0 0 16 16"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    className="bi bi-plus-circle-fill"
-                    viewBox="0 0 16 16"
-                  >
-                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z" />
-                  </svg>{" "}
-                  Add
-                </button>
-              </div>
-            </form>
-          </div>
-
-          <hr />
-
-          {/* TABLA DE CONTACTOS */}
-          <div className="contact-list">
-            <h2>Contact List</h2>
-            <div className="table-responsive-lg">
-              <table className="table table-list table-hover">
-                <thead className="table-dark">
-                  <tr>
-                    <th>Name</th>
-                    <th>Lastname</th>
-                    <th>Phone</th>
-                    <th>Email</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {contactList.map((contact) => (
-                    <tr key={contact.id}>
-                      <td>{contact.name}</td>
-                      <td>{contact.lastname}</td>
-                      <td>{contact.phone}</td>
-                      <td>{contact.email}</td>
-                      <td>
-                        <div className="buttonGroup">
-                          <button
-                            className="btn btn-dark"
-                            data-bs-toggle="modal"
-                            data-bs-target="#updateModal"
-                            onClick={() => setCurrentContact(contact)}
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="16"
-                              height="16"
-                              fill="currentColor"
-                              className="bi bi-pencil-square"
-                              viewBox="0 0 16 16"
-                            >
-                              <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                              <path
-                                fillRule="evenodd"
-                                d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
-                              />
-                            </svg>{" "}
-                            <span>Edit</span>
-                          </button>
-
-                          <button
-                            className="btn btn-danger"
-                            onClick={() => {
-                              deleteContact(contact.id);
-                            }}
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="16"
-                              height="16"
-                              fill="currentColor"
-                              className="bi bi-trash3-fill"
-                              viewBox="0 0 16 16"
-                            >
-                              <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z" />
-                            </svg>{" "}
-                            <span>Delete</span>
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z" />
+                </svg>{" "}
+                Add
+              </button>
             </div>
-          </div>
-        </main>
-        <div className="login">
-          <button
-            className="btn btn-warning"
-            type="submit"
-            onClick={() => {
-              signInWithGoogle();
-            }}
-          >
-            Google
-          </button>
-          <button
-            className="btn btn-primary"
-            type="submit"
-            onClick={() => {
-              signInWithFacebook();
-            }}
-          >
-            Facebook
-          </button>
-          <button
-            className="btn btn-dark"
-            type="submit"
-            onClick={() => {
-              signInWithGitHub();
-            }}
-          >
-            GitHub
-          </button>
+          </form>
         </div>
-      {/* <!-- MODAL --> */}
-      <div
+
+        <hr />
+
+        {/* TABLA DE CONTACTOS */}
+        <div className="contact-list">
+          <h2>Contact List</h2>
+          <div className="table-responsive-lg">
+            <table className="table table-list table-hover">
+              <thead className="table-dark">
+                <tr>
+                  <th>Name</th>
+                  <th>Lastname</th>
+                  <th>Phone</th>
+                  <th>Email</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {contactList.map((contact) => (
+                  <tr key={contact.id}>
+                    <td>{contact.name}</td>
+                    <td>{contact.lastname}</td>
+                    <td>{contact.phone}</td>
+                    <td>{contact.email}</td>
+                    <td>
+                      <div className="buttonGroup">
+                        <button
+                          className="btn btn-dark"
+                          data-bs-toggle="modal"
+                          data-bs-target="#updateModal"
+                          onClick={() => setCurrentContact(contact)}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            className="bi bi-pencil-square"
+                            viewBox="0 0 16 16"
+                          >
+                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                            <path
+                              fillRule="evenodd"
+                              d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
+                            />
+                          </svg>{" "}
+                          <span>Edit</span>
+                        </button>
+
+                        <button
+                          className="btn btn-danger"
+                          onClick={() => {
+                            deleteContact(contact.id);
+                          }}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            className="bi bi-trash3-fill"
+                            viewBox="0 0 16 16"
+                          >
+                            <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z" />
+                          </svg>{" "}
+                          <span>Delete</span>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+        <div
         className="modal fade"
         id="updateModal"
         tabIndex="-1"
@@ -426,6 +407,38 @@ function App() {
           </div>
         </div>
       </div>
+      </>
+      ) : (
+        <div className="login">
+          <button
+            className="btn btn-warning"
+            type="submit"
+            onClick={() => {
+              signInWithGoogle();
+            }}
+          >
+            Google
+          </button>
+          <button
+            className="btn btn-primary"
+            type="submit"
+            onClick={() => {
+              signInWithFacebook();
+            }}
+          >
+            Facebook
+          </button>
+          <button
+            className="btn btn-dark"
+            type="submit"
+            onClick={() => {
+              signInWithGitHub();
+            }}
+          >
+            GitHub
+          </button>
+        </div>
+      )}
     </>
   );
 }
