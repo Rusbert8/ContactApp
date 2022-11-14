@@ -32,24 +32,45 @@ function App() {
   const [currentContact, setCurrentContact] = useState(initialContact);
 
   // -------------------------------------------------------------------------------
-  onAuthStateChanged(auth, async (user) => {
-    const logoutButton = document.querySelector(".btn-logout");
+  // LISTAR LOS CONTACTOS AGREGADOS
 
-    if (user) {
-      console.log(user)
-      setUser(user);
-      logoutButton.style.display = "initial"
-      console.log("SI hay usuario")
-    } else {
-      setUser(null);
-      logoutButton.style.display = "none"
-      console.log("NO hay usuario")
-    }
-  });
+  // Función que obtiene los contactos la primera vez que carga el sitio web:
+  useEffect(() => { 
+    // Función que obtiene los contactos de la colección de contactos:
+    const getContacts = async () => {
+      const data = await getDocs(contactsCollectionRef);
+      const dataList = data.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+      dataList.sort((x, y) => {
+        return x.name.localeCompare(y.name);
+      });
+      setContactList(dataList);
+    };
+
+    getContacts();
+  }, []);
+
+  // -------------------------------------------------------------------------------
+  useEffect(() => {
+    onAuthStateChanged(auth, async (user) => {
+      const logoutButton = document.querySelector(".btn-logout");
   
+      if (user) {
+        console.log(user)
+        setUser(user);
+        logoutButton.style.display = "initial"
+        console.log("SI hay usuario")
+      } else {
+        setUser(null);
+        logoutButton.style.display = "none"
+        console.log("NO hay usuario")
+      }
+    });
+  }, [user])
+  
+
   // -------------------------------------------------------------------------------
   // CREAR Y AGREGAR UN CONTACTO NUEVO
-  
   
   // Controlador de  cambios en los Inputs del formulario que crea contactos:
   const handleInputChangesNew = (e) => {
@@ -93,26 +114,6 @@ function App() {
     await deleteDoc(contactDoc);
     setContactList(contactList.filter((contact) => contact.id !== id));
   };
-
-  // -------------------------------------------------------------------------------
-  // LISTAR LOS CONTACTOS AGREGADOS
-
-
-  // Función que obtiene los contactos de la colección de contactos:
-  const getContacts = async () => {
-    const data = await getDocs(contactsCollectionRef);
-    const dataList = data.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-
-    dataList.sort((x, y) => {
-      return x.name.localeCompare(y.name);
-    });
-    setContactList(dataList);
-  };
-
-  // Función que obtiene los contactos la primera vez que carga el sitio web:
-  useEffect(() => {
-    getContacts();
-  }, []);
 
   // -------------------------------------------------------------------------------
 
