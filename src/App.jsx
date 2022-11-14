@@ -26,7 +26,7 @@ const initialContact = {
 };
 
 function App() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState("loading");
   const [contact, setContact] = useState(initialContact);
   const [contactList, setContactList] = useState([]);
   const [currentContact, setCurrentContact] = useState(initialContact);
@@ -53,21 +53,21 @@ function App() {
   // -------------------------------------------------------------------------------
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
-      const logoutButton = document.querySelector(".btn-logout");
+      // const logoutButton = document.querySelector(".btn-logout");
   
       if (user) {
-        console.log(user)
         setUser(user);
-        logoutButton.style.display = "initial"
+        // logoutButton.style.display = "initial"
         console.log("SI hay usuario")
       } else {
         setUser(null);
-        logoutButton.style.display = "none"
+
+        // logoutButton.style.display = "none"
+
         console.log("NO hay usuario")
       }
     });
   }, [user])
-  
 
   // -------------------------------------------------------------------------------
   // CREAR Y AGREGAR UN CONTACTO NUEVO
@@ -116,7 +116,10 @@ function App() {
   };
 
   // -------------------------------------------------------------------------------
-
+  if (user === "loading") {
+    return <h1>Cargando</h1>
+  }
+  
   return (
     <>
       <header>
@@ -134,6 +137,7 @@ function App() {
             <button
               className="btn btn-outline-danger btn-logout"
               type="submit"
+              style={!user ? { display: 'none'} : { display: 'initial'}}
               onClick={() => {
                 logOut();
               }}
