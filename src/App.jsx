@@ -10,21 +10,22 @@ import {
 } from "firebase/firestore";
 import { useState, useEffect } from "react";
 
+const contactsCollectionRef = collection(db, "contacts");
+const initialContact = {
+  name: "",
+  lastname: "",
+  phone: "",
+  email: "",
+};
+
 function App() {
-  const contactsCollectionRef = collection(db, "contacts");
-
-  const initialContact = {
-    name: "",
-    lastname: "",
-    phone: "",
-    email: "",
-  };
-
-
+  const [contact, setContact] = useState(initialContact);
+  const [contactList, setContactList] = useState([]);
+  const [currentContact, setCurrentContact] = useState(initialContact);
+  
   // -------------------------------------------------------------------------------
   // CREAR Y AGREGAR UN CONTACTO NUEVO
-
-  const [contact, setContact] = useState(initialContact);
+  
   
   // Controlador de  cambios en los Inputs del formulario que crea contactos:
   const handleInputChangesNew = (e) => {
@@ -35,15 +36,17 @@ function App() {
   // Función que agrega un nuevo contacto en la colección de contactos:
   const addContact = async () => {
     const contactDoc = contact;
-    await addDoc(contactsCollectionRef, contactDoc);
-    setContact(initialContact);
-    getContacts();
+
+    if ((contactDoc.name !== "") && (contactDoc.phone !== "" || contactDoc.email !== "")) {
+      const docRef = await addDoc(contactsCollectionRef, contactDoc);
+      setContactList([...contactList, {...contactDoc, id: docRef.id}]);
+      setContact(initialContact);
+    }
   };
-
-
+  
+  
   // -------------------------------------------------------------------------------
   // MODIFICAR UN CONTACTO
-  const [currentContact, setCurrentContact] = useState(initialContact);
 
   // Controlador de  cambios en los Inputs del formulario que modifica contactos:
   const handleInputChangesCurrent = (e) => {
@@ -55,7 +58,7 @@ function App() {
   const updateContact = async (id) => {
     const contactDoc = doc(db, "contacts", id);
     await updateDoc(contactDoc, currentContact);
-    getContacts();
+    setContactList(contactList.map((contact) => contact.id === id ? {...contact, ...currentContact} : contact));
   };
 
 
@@ -66,14 +69,13 @@ function App() {
   const deleteContact = async (id) => {
     const contactDoc = doc(db, "contacts", id);
     await deleteDoc(contactDoc);
-    getContacts();
+    setContactList(contactList.filter((contact) => contact.id !== id));
   };
 
 
   // -------------------------------------------------------------------------------
   // LISTAR LOS CONTACTOS AGREGADOS
 
-  const [contactList, setContactList] = useState([]);
 
   // Función que obtiene los contactos de la colección de contactos:
   const getContacts = async () => {
@@ -129,6 +131,7 @@ function App() {
                 value={contact.name}
                 onChange={handleInputChangesNew}
                 autoComplete="off"
+                required
               />
               <input
                 className="col-md-6 col-lg-3"
