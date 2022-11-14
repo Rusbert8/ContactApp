@@ -10,15 +10,15 @@ import {
 } from "firebase/firestore";
 import { useState, useEffect } from "react";
 
-function App() {
-  const contactsCollectionRef = collection(db, "contacts");
-  const initialContact = {
-    name: "",
-    lastname: "",
-    phone: "",
-    email: "",
-  };
+const contactsCollectionRef = collection(db, "contacts");
+const initialContact = {
+  name: "",
+  lastname: "",
+  phone: "",
+  email: "",
+};
 
+function App() {
   const [contact, setContact] = useState(initialContact);
   const [contactList, setContactList] = useState([]);
   const [currentContact, setCurrentContact] = useState(initialContact);
@@ -38,10 +38,10 @@ function App() {
     const contactDoc = contact;
 
     if ((contactDoc.name !== "") && (contactDoc.phone !== "" || contactDoc.email !== "")) {
-      await addDoc(contactsCollectionRef, contactDoc);
+      const docRef = await addDoc(contactsCollectionRef, contactDoc);
+      setContactList([...contactList, {...contactDoc, id: docRef.id}]);
       setContact(initialContact);
     }
-    getContacts();
   };
   
   
@@ -58,7 +58,7 @@ function App() {
   const updateContact = async (id) => {
     const contactDoc = doc(db, "contacts", id);
     await updateDoc(contactDoc, currentContact);
-    getContacts();
+    setContactList(contactList.map((contact) => contact.id === id ? {...contact, ...currentContact} : contact));
   };
 
 
@@ -69,7 +69,7 @@ function App() {
   const deleteContact = async (id) => {
     const contactDoc = doc(db, "contacts", id);
     await deleteDoc(contactDoc);
-    getContacts();
+    setContactList(contactList.filter((contact) => contact.id !== id));
   };
 
 
