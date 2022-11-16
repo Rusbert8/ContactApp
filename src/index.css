@@ -14,7 +14,6 @@
     }
     .buttonGroup{
         display: flex;
-        display: ;
     }
 }
 
@@ -136,4 +135,17 @@ td button {
 
 .modal-footer{
     background-color: rgb(29, 29, 29) !important;
+}
+
+div.spinner{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.spinner-border{
+    width: 5em;
+    height: 5em;
 }

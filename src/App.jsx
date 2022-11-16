@@ -29,6 +29,7 @@ const initialContact = {
   phone: "",
   email: "",
 };
+
 // -------------------------------------------------------------------------------
 
 function App() {
@@ -113,9 +114,13 @@ function App() {
   // -------------------------------------------------------------------------------
   // RENDERIZAR LA PÁGINA
 
-  // Contenido que se muestra al recargar la página luego de iniciar sesión:
+  // Página cargando:
   if (user === "loading") {
-    return <h1>Cargando</h1>
+    return (
+      <div className="container spinner">
+        <div className="spinner-border text-primary" role="status"></div>
+      </div>
+    );
   }
 
   // Contenido que se muestra al iniciar la página:
