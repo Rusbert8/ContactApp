@@ -1,5 +1,11 @@
-import { auth } from './firebase-config';
-import { signInWithPopup, signOut, GoogleAuthProvider, FacebookAuthProvider, GithubAuthProvider} from "firebase/auth";
+import { auth } from "./firebase-config";
+import {
+  signInWithPopup,
+  signOut,
+  GoogleAuthProvider,
+  FacebookAuthProvider,
+  GithubAuthProvider,
+} from "firebase/auth";
 
 // Iniciar Sesión Google
 export const signInWithGoogle = async () => {
@@ -10,7 +16,7 @@ export const signInWithGoogle = async () => {
   } catch (error) {
     console.log(error.message);
   }
-}
+};
 
 // Iniciar Sesión Facebook
 export const signInWithFacebook = async () => {
@@ -21,7 +27,7 @@ export const signInWithFacebook = async () => {
   } catch (error) {
     console.log(error.message);
   }
-}
+};
 
 // Iniciar Sesión Github
 export const signInWithGitHub = async () => {
@@ -32,9 +38,9 @@ export const signInWithGitHub = async () => {
   } catch (error) {
     console.log(error.message);
   }
-}
+};
 
 // Cerrar Sesión
 export const logOut = async () => {
-  await signOut(auth)
-}
+  await signOut(auth);
+};

@@ -1,11 +1,11 @@
 import React from "react";
-import { db, auth } from "../firebase-config";
+import { db, auth } from "./firebase-config";
 import {
   signInWithGoogle,
   signInWithFacebook,
   signInWithGitHub,
   logOut,
-} from "../firebase-auth";
+} from "./firebase-auth";
 import { onAuthStateChanged } from "firebase/auth";
 import {
   collection,
