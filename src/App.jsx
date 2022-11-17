@@ -77,7 +77,7 @@ function App() {
   const addContact = async () => {
     const contactDoc = contact;
 
-    if ((contactDoc.name !== "") && (contactDoc.phone !== "" || contactDoc.email !== "")) {
+    if ((contactDoc.name !== "") && (contactDoc.phone !== "")) {
       const docRef = await addDoc(contactsCollectionRef, contactDoc);
       setContactList([...contactList, {...contactDoc, id: docRef.id}]);
       setContact(initialContact);
@@ -95,9 +95,11 @@ function App() {
 
   // Función que modifica un contacto en la colección de contactos:
   const updateContact = async (id) => {
-    const contactDoc = doc(db, "contacts", id);
-    await updateDoc(contactDoc, currentContact);
-    setContactList(contactList.map((contact) => contact.id === id ? {...contact, ...currentContact} : contact));
+    if ((currentContact.name !== "") && (currentContact.phone !== "")) {
+      const contactDoc = doc(db, "contacts", id);
+      await updateDoc(contactDoc, currentContact);
+      setContactList(contactList.map((contact) => contact.id === id ? {...contact, ...currentContact} : contact));
+    }
   };
 
   // -------------------------------------------------------------------------------
@@ -116,8 +118,8 @@ function App() {
   // Página cargando:
   if (user === "loading") {
     return (
-      <div className="container spinner">
-        <div className="spinner-border text-primary" role="status"></div>
+      <div className="container spinner-rendering">
+        <div className="spinner-rendering-border text-primary" role="status"></div>
       </div>
     );
   }
@@ -138,7 +140,7 @@ function App() {
               </h1>
             </div>
             <button
-              className="btn btn-outline-danger btn-logout"
+              className="btn btn-outline-info btn-logout"
               type="submit"
               style={!user ? { display: 'none'} : { display: 'initial'}}
               onClick={() => {
@@ -197,10 +199,11 @@ function App() {
                   value={contact.phone}
                   onChange={handleInputChangesNew}
                   autoComplete="off"
+                  required
                 />
                 <input
                   className="col-md-6 col-lg-3"
-                  type="text"
+                  type="email"
                   placeholder="Email"
                   name="email"
                   value={contact.email}
@@ -347,7 +350,10 @@ function App() {
                       id="name"
                       value={currentContact.name}
                       onChange={handleInputChangesCurrent}
+                      autoComplete="off"
+                      required
                     />
+
                     <label htmlFor="lastname" className="form-label">
                       Lastname
                     </label>
@@ -359,7 +365,9 @@ function App() {
                       id="lastname"
                       value={currentContact.lastname}
                       onChange={handleInputChangesCurrent}
+                      autoComplete="off"
                     />
+
                     <label htmlFor="phone" className="form-label ">
                       Phone
                     </label>
@@ -371,18 +379,22 @@ function App() {
                       name="phone"
                       value={currentContact.phone}
                       onChange={handleInputChangesCurrent}
+                      autoComplete="off"
+                      required
                     />
+
                     <label htmlFor="email" className="form-label">
                       Email
                     </label>
                     <input
                       className="col-lg-12 form-control"
-                      type="text"
+                      type="email"
                       placeholder="Email"
                       id="email"
                       name="email"
                       value={currentContact.email}
                       onChange={handleInputChangesCurrent}
+                      autoComplete="off"
                     />
                   </div>
                 </form>

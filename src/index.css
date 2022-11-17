@@ -141,7 +141,7 @@ td button {
     background-color: rgb(29, 29, 29) !important;
 }
 
-div.spinner{
+div.spinner-rendering{
     width: 100vw;
     height: 100vh;
     display: flex;
@@ -149,9 +149,22 @@ div.spinner{
     align-items: center;
 }
 
-.spinner-border{
+.spinner-rendering-border{
     width: 5em;
     height: 5em;
+}
+
+div.spinner-table{
+    width: 100vw;
+    height: 20vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.spinner-border-table{
+    width: 3em;
+    height: 3em;
 }
 
 .login-container{
@@ -179,6 +192,7 @@ div.spinner{
 }
 
 .btn-login {
+    min-width: 16em;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -194,13 +208,9 @@ div.spinner{
     background-position: 12px 11px;
     margin-top: 1.5em;
   }
-    
-.btn-login:hover {
-    box-shadow: .3em .3em 0 rgba(250, 244, 244, 0.084), 0 2px 4px rgba(0, 0, 0, .25);
-}
 
 .btn-login:active {
-    box-shadow: .4em .4em 0 rgba(250, 244, 244, 0.202), 0 2px 4px rgba(0, 0, 0, .25);
+    box-shadow: .3em .3em 0 rgba(250, 244, 244, 0.084), 0 2px 4px rgba(0, 0, 0, .25);
 }
 
 .btn-login-with-google{
