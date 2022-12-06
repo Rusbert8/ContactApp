@@ -5,12 +5,12 @@ import { getAuth } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyCqbpTw8S0LNeYYuCaom9HzkFwySg3OmRY",
-    authDomain: "contactapp---react.firebaseapp.com",
-    projectId: "contactapp---react",
-    storageBucket: "contactapp---react.appspot.com",
-    messagingSenderId: "857473392000",
-    appId: "1:857473392000:web:79603871bfb8a945197565"
+    apiKey: "AIzaSyCCaHMG6lf399cH2IitwC8rwLmi1a0BocY",
+    authDomain: "contactapp-e6f98.firebaseapp.com",
+    projectId: "contactapp-e6f98",
+    storageBucket: "contactapp-e6f98.appspot.com",
+    messagingSenderId: "698681540294",
+    appId: "1:698681540294:web:68175c7be4f86ce63321c7"
   };
   
 // Initialize Firebase
